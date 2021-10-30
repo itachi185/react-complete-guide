@@ -1,32 +1,22 @@
-import React, { useState, useCallback } from "react";
+import UserFinder from "./components/UserFinder";
+import UsersContext from "./store/users-context";
 
-import Button from "./components/UI/Button/Button";
-
-import "./App.css";
-import DemeOutput from "./components/Demo/DemoOutput";
+const DUMMY_USERS = [
+  { id: "u1", name: "Max" },
+  { id: "u2", name: "Manuel" },
+  { id: "u3", name: "Julie" },
+];
 
 function App() {
-  const [showParagraph, setShowParagraph] = useState(false);
-  const [allowToggle, setAllowToggle] = useState(false);
-
-  console.log("App RUNNING");
-
-  const togglePragraphHandler = useCallback(() => {
-    if (allowToggle) {
-      setShowParagraph((prevShowParagraph) => !prevShowParagraph);
-    }
-  }, [allowToggle]);
-
-  const allowToggleHandler = () => {
-    setAllowToggle(true);
+  const usersContext = {
+    users: DUMMY_USERS,
   };
 
   return (
-    <div className="app">
-      <h1>Hi there!</h1>
-      <DemeOutput show={showParagraph} />
-      <Button onClick={allowToggleHandler}>Allow Toggle!</Button>
-      <Button onClick={togglePragraphHandler}>Toggle Paragraph!</Button>
+    <div>
+      <UsersContext.Provider value={usersContext}>
+        <UserFinder />
+      </UsersContext.Provider>
     </div>
   );
 }
