@@ -1,32 +1,30 @@
-import { Route, Switch, Redirect } from "react-router-dom";
-import Layout from "./components/layout/Layout";
-import Allquotes from "./pages/AllQuotes";
-import Newquote from "./pages/NewQuote";
-import Notfound from "./pages/NotFound";
-import Quotedetail from "./pages/QuoteDetail";
+import { Route, Routes, Navigate } from "react-router-dom";
+
+import Welcome from "./pages/Welcome";
+import Products from "./pages/Products";
+import ProductDetail from "./pages/ProductDetail";
+import MainHeader from "./components/MainHeader";
 
 function App() {
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" exact>
-          <Redirect to="/quotes" />
-        </Route>
-        <Route path="/quotes" exact>
-          <Allquotes />
-        </Route>
-        <Route path="/quotes/:quoteId">
-          <Quotedetail />
-        </Route>
-        <Route path="/new-quote">
-          <Newquote />
-        </Route>
-        <Route path="*">
-          <Notfound />
-        </Route>
-      </Switch>
-    </Layout>
+    <div>
+      <MainHeader />
+      <main>
+        <Routes>
+          <Route path="/" element={<Navigate to="/welcome" />} />
+          <Route path="/welcome/*" element={<Welcome />}>
+            <Route path="new-user" element={<p>Welcome, new user!</p>} />
+          </Route>
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:productId" element={<ProductDetail />} />
+        </Routes>
+      </main>
+    </div>
   );
 }
 
 export default App;
+
+// our-domain.com/welcome => Welcome Component
+// our-domain.com/products => Products Component
+// our-domain.com/product-detail/a-book
