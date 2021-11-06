@@ -1,30 +1,48 @@
-import { Route, Routes, Navigate } from "react-router-dom";
+import React, { Suspense } from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
 
-import Welcome from "./pages/Welcome";
-import Products from "./pages/Products";
-import ProductDetail from "./pages/ProductDetail";
-import MainHeader from "./components/MainHeader";
+import Layout from "./components/Layout/Layout";
+import LoadingSpinner from "./components/UI/LoadingSpinner";
+import Allquotes from "./pages/AllQuotes";
+import Newquote from "./pages/NewQuote";
+import Notfound from "./pages/NotFound";
+import Quotedetail from "./pages/QuoteDetail";
+
+const NewQuote = React.lazy(() => import("./pages/NewQuote"));
+const QuoteDetail = React.lazy(() => import("./pages/QuoteDetail"));
+const NotFound = React.lazy(() => import("./pages/NotFound"));
+const AllQuotes = React.lazy(() => import("./pages/AllQuotes"));
 
 function App() {
   return (
-    <div>
-      <MainHeader />
-      <main>
-        <Routes>
-          <Route path="/" element={<Navigate to="/welcome" />} />
-          <Route path="/welcome/*" element={<Welcome />}>
-            <Route path="new-user" element={<p>Welcome, new user!</p>} />
+    <Layout>
+      <Suspense
+        fallback={
+          <div className="centered">
+            <LoadingSpinner />
+          </div>
+        }
+      >
+        <Switch>
+          <Route path="/" exact>
+            <Redirect to="/quotes" />
           </Route>
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:productId" element={<ProductDetail />} />
-        </Routes>
-      </main>
-    </div>
+          <Route path="/quotes" exact>
+            <Allquotes />
+          </Route>
+          <Route path="/quotes/:quoteId">
+            <Quotedetail />
+          </Route>
+          <Route path="/new-quote">
+            <Newquote />
+          </Route>
+          <Route path="*">
+            <Notfound />
+          </Route>
+        </Switch>
+      </Suspense>
+    </Layout>
   );
 }
 
 export default App;
-
-// our-domain.com/welcome => Welcome Component
-// our-domain.com/products => Products Component
-// our-domain.com/product-detail/a-book
